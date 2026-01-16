@@ -1,16 +1,15 @@
 # KITCHEN COMPASS - PROJECT PRESENTATION
 
-## 📢 3-4 MINUTE PRESENTATION SPEECH
 
 ---
 
-### OPENING (30 seconds)
+### OPENING
 
 "Good morning/afternoon, respected faculty and fellow students. I am [Your Name], and along with my team members Aadi Runwal, Anurag Soni, Abhishek Kumar, and Ankit Khandait, I'm pleased to present our Minor Project: **Kitchen Compass - A Recipe Finder Web Application**."
 
 ---
 
-### PROBLEM STATEMENT (45 seconds)
+### PROBLEM STATEMENT 
 
 "Let me start with a common problem we all face. How many times have you opened your refrigerator, seen vegetables or ingredients, but had no idea what to cook? Or worse, ingredients go to waste because we don't know recipes to use them?
 
@@ -20,7 +19,7 @@ Our project, Kitchen Compass, directly solves these real-world problems."
 
 ---
 
-### SOLUTION OVERVIEW (45 seconds)
+### SOLUTION OVERVIEW 
 
 "Kitchen Compass is a web-based application that helps users discover recipes in two innovative ways:
 
@@ -32,7 +31,7 @@ The application is completely free, works on any device - smartphone, tablet, or
 
 ---
 
-### KEY FEATURES (60 seconds)
+### KEY FEATURES 
 
 "Let me highlight our key features that make Kitchen Compass unique:
 
@@ -50,7 +49,7 @@ The application is completely free, works on any device - smartphone, tablet, or
 
 ---
 
-### TECHNICAL IMPLEMENTATION (45 seconds)
+### TECHNICAL IMPLEMENTATION 
 
 "From a technical perspective, Kitchen Compass is built using three core web technologies:
 
@@ -64,7 +63,7 @@ The application follows a Single Page Application architecture where all pages e
 
 ---
 
-### IMPACT & BENEFITS (30 seconds)
+### IMPACT & BENEFITS 
 
 "Kitchen Compass delivers real benefits:
 
@@ -76,13 +75,13 @@ The application follows a Single Page Application architecture where all pages e
 
 ---
 
-### TESTING & RESULTS (20 seconds)
+### TESTING & RESULTS 
 
 "We conducted comprehensive testing across multiple browsers - Chrome, Firefox, Safari, and Edge - and various devices from smartphones to desktops. Our user testing showed 100% task completion rate and 4.6 out of 5 satisfaction score. Users particularly loved the step-by-step cooking mode and clean interface."
 
 ---
 
-### CLOSING (20 seconds)
+### CLOSING 
 
 "In conclusion, Kitchen Compass represents a practical solution to everyday cooking challenges, demonstrating how web technologies can create meaningful impact. We're proud of what we've built and excited about future enhancements like recipe images, user accounts, and voice-guided cooking.
 

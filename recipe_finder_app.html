@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitchen Compass - Your Culinary Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            width: 100%;
+            min-height: 500px;
+            padding: 40px;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #764ba2;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.8em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: block;
+            margin: 30px auto;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .toggle-btn {
+            background: #f0f0f0;
+            color: #666;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1em;
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .ingredient-grid, .season-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .ingredient-card, .season-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .ingredient-card:hover, .season-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .recipe-ticket {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 25px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            border: 3px solid transparent;
+        }
+
+        .recipe-ticket:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(252, 182, 159, 0.4);
+            border-color: #fc6076;
+        }
+
+        .recipe-ticket h3 {
+            color: #d63031;
+            margin-bottom: 10px;
+        }
+
+        .ingredients-list {
+            text-align: left;
+            margin: 20px 0;
+        }
+
+        .ingredient-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: background 0.3s;
+        }
+
+        .ingredient-item:hover {
+            background: #e9ecef;
+        }
+
+        .ingredient-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .step-display {
+            text-align: center;
+            padding: 60px 40px;
+            cursor: pointer;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            transition: transform 0.2s;
+        }
+
+        .step-display:hover {
+            transform: scale(1.02);
+        }
+
+        .step-number {
+            font-size: 2em;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .step-text {
+            font-size: 1.5em;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .tap-hint {
+            margin-top: 30px;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .completion-message {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .completion-message h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .completion-message p {
+            font-size: 1.3em;
+            color: #666;
+            margin: 20px 0;
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 40px;
+            color: #e74c3c;
+        }
+
+        .error-message h2 {
+            color: #e74c3c;
+        }
+
+        .back-btn {
+            background: #6c757d;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Page 1: Welcome -->
+        <div id="page1" class="page active">
+            <h1>🍳 Kitchen Compass</h1>
+            <p class="subtitle">Your Personal Culinary Guide</p>
+            <p style="text-align: center; color: #666; margin: 30px 0;">Discover delicious recipes based on what you have or what's in season!</p>
+            <button class="btn" onclick="goToPage(2)">Start Cooking</button>
+        </div>
+
+        <!-- Page 2: Mode Selection -->
+        <div id="page2" class="page">
+            <h2 id="modeTitle">The Ingredient Chef</h2>
+            <div class="toggle-container">
+                <button class="toggle-btn active" onclick="switchMode('ingredient')">By Ingredient</button>
+                <button class="toggle-btn" onclick="switchMode('season')">By Season</button>
+            </div>
+
+            <!-- Ingredient Selection -->
+            <div id="ingredientSection">
+                <p class="subtitle">What's in your kitchen today?</p>
+                <div class="ingredient-grid" id="ingredientGrid"></div>
+            </div>
+
+            <!-- Season Selection -->
+            <div id="seasonSection" style="display: none;">
+                <p class="subtitle">Pick a season for fresh recipes</p>
+                <div class="season-grid" id="seasonGrid"></div>
+            </div>
+        </div>
+
+        <!-- Page 3: Recipe Selection -->
+        <div id="page3" class="page">
+            <h2>Choose Your Recipe</h2>
+            <div class="recipe-grid" id="recipeGrid"></div>
+            <button class="btn back-btn" onclick="goToPage(2)">← Back</button>
+        </div>
+
+        <!-- Page 4: Ingredients Checklist -->
+        <div id="page4" class="page">
+            <h2 id="recipeName"></h2>
+            <p class="subtitle">Make sure you have everything!</p>
+            <div class="ingredients-list" id="ingredientsList"></div>
+            <button class="btn" onclick="startCooking()">Start Cooking →</button>
+            <button class="btn back-btn" onclick="goToPage(3)">← Back</button>
+        </div>
+
+        <!-- Page 5: Cooking Steps -->
+        <div id="page5" class="page">
+            <div class="step-display" onclick="nextStep()">
+                <div class="step-number" id="stepNumber"></div>
+                <div class="step-text" id="stepText"></div>
+                <div class="tap-hint">👆 Tap anywhere to continue</div>
+            </div>
+        </div>
+
+        <!-- Page 6: Completion -->
+        <div id="page6" class="page">
+            <div class="completion-message">
+                <h1>🎉 Recipe Complete!</h1>
+                <p>Your dish is ready to enjoy!</p>
+                <p style="font-size: 2em; margin: 30px 0;">Bon Appétit! 🍽️</p>
+                <button class="btn" onclick="goToPage(1)">Cook Something Else</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const recipes = {
+            paneer: [
+                {
+                    name: "Palak Paneer",
+                    ingredients: ["500g spinach", "200g paneer cubes", "2 onions", "2 tomatoes", "3 cloves garlic", "1 inch ginger", "2 green chilies", "1 tsp cumin seeds", "1 tsp garam masala", "Salt to taste", "2 tbsp oil", "1/2 cup cream"],
+                    steps: ["Blanch spinach in boiling water for 2 minutes", "Drain and blend spinach into smooth paste", "Heat oil in pan and add cumin seeds", "Add chopped onions and sauté until golden", "Add ginger-garlic paste and cook for 1 minute", "Add chopped tomatoes and cook until soft", "Add spinach paste and mix well", "Add salt and garam masala", "Add paneer cubes and mix gently", "Simmer for 5 minutes", "Add cream and stir", "Garnish with cream swirl and serve hot"]
+                },
+                {
+                    name: "Paneer Butter Masala",
+                    ingredients: ["250g paneer cubes", "3 tomatoes", "2 onions", "2 tbsp butter", "1/2 cup cream", "1 tbsp kasuri methi", "1 tsp red chili powder", "1 tsp garam masala", "Salt to taste", "1 tbsp cashew paste"],
+                    steps: ["Boil tomatoes and blend into puree", "Heat butter in pan", "Add chopped onions and sauté", "Add tomato puree and cook for 5 minutes", "Add red chili powder and salt", "Add cashew paste and mix", "Add paneer cubes", "Add cream and kasuri methi", "Simmer for 5 minutes", "Garnish and serve hot"]
+                }
+            ],
+            potato: [
+                {
+                    name: "Aloo Gobi",
+                    ingredients: ["3 potatoes cubed", "1 cauliflower florets", "2 onions", "2 tomatoes", "1 tsp turmeric", "1 tsp cumin seeds", "2 tsp coriander powder", "1 tsp red chili powder", "Salt to taste", "2 tbsp oil", "Fresh coriander for garnish"],
+                    steps: ["Heat oil in pan", "Add cumin seeds and let them crackle", "Add chopped onions and sauté", "Add turmeric and red chili powder", "Add chopped tomatoes and cook", "Add potato cubes and mix", "Add cauliflower florets", "Add salt and coriander powder", "Cover and cook on low heat for 15 minutes", "Stir occasionally", "Garnish with fresh coriander", "Serve hot with roti"]
+                },
+                {
+                    name: "Dum Aloo",
+                    ingredients: ["8 baby potatoes", "2 onions", "3 tomatoes", "1/2 cup yogurt", "1 tsp red chili powder", "1 tsp garam masala", "1/2 tsp turmeric", "2 bay leaves", "Salt to taste", "3 tbsp oil", "Fresh coriander"],
+                    steps: ["Boil and prick baby potatoes", "Deep fry potatoes until golden", "Grind onions and tomatoes separately", "Heat oil and add bay leaves", "Add onion paste and cook until golden", "Add tomato paste and spices", "Cook until oil separates", "Add beaten yogurt slowly", "Add fried potatoes", "Add water and simmer for 10 minutes", "Garnish with coriander and serve"]
+                }
+            ],
+            tomato: [
+                {
+                    name: "Tomato Rice",
+                    ingredients: ["2 cups rice", "4 tomatoes pureed", "2 onions", "2 green chilies", "1 tsp mustard seeds", "Curry leaves", "1 tsp turmeric", "2 tbsp oil", "Salt to taste", "Coriander for garnish"],
+                    steps: ["Cook rice and keep aside", "Heat oil in pan", "Add mustard seeds and curry leaves", "Add chopped onions and green chilies", "Sauté until onions are soft", "Add tomato puree", "Add turmeric and salt", "Cook until mixture thickens", "Add cooked rice", "Mix gently", "Garnish with coriander", "Serve hot with raita"]
+                }
+            ],
+            onion: [
+                {
+                    name: "Onion Pakoda",
+                    ingredients: ["3 large onions sliced", "1 cup gram flour", "2 green chilies chopped", "1 tsp red chili powder", "1/2 tsp turmeric", "A pinch of baking soda", "Salt to taste", "Oil for deep frying", "Coriander leaves"],
+                    steps: ["Slice onions thinly", "Add gram flour to onions", "Add all spices and salt", "Add chopped chilies and coriander", "Add baking soda", "Mix well without water", "Heat oil for deep frying", "Drop small portions into hot oil", "Fry until golden and crispy", "Drain on paper towels", "Serve hot with chutney"]
+                }
+            ],
+            spinach: [
+                {
+                    name: "Palak Soup",
+                    ingredients: ["500g spinach", "1 onion", "2 cloves garlic", "1 potato", "4 cups vegetable stock", "1/2 cup cream", "Salt and pepper", "1 tbsp butter", "Nutmeg powder"],
+                    steps: ["Blanch spinach leaves", "Heat butter in pot", "Sauté chopped onions and garlic", "Add diced potato", "Add vegetable stock", "Boil until potato is soft", "Add blanched spinach", "Blend everything until smooth", "Return to heat", "Add cream, salt, and pepper", "Add pinch of nutmeg", "Serve hot with croutons"]
+                }
+            ],
+            cauliflower: [
+                {
+                    name: "Gobi Manchurian",
+                    ingredients: ["1 cauliflower florets", "1/2 cup cornflour", "1/4 cup all-purpose flour", "2 onions cubed", "1 capsicum cubed", "3 tbsp soy sauce", "2 tbsp chili sauce", "1 tbsp vinegar", "2 tsp ginger-garlic paste", "Spring onions", "Oil for frying"],
+                    steps: ["Mix cornflour, flour, salt, and water for batter", "Coat cauliflower florets in batter", "Deep fry until golden", "Keep aside on paper towel", "Heat oil in wok", "Add ginger-garlic paste", "Add onions and capsicum", "Stir fry on high heat", "Add sauces and vinegar", "Add fried cauliflower", "Toss well", "Garnish with spring onions and serve"]
+                }
+            ],
+            carrot: [
+                {
+                    name: "Carrot Halwa",
+                    ingredients: ["4 cups grated carrots", "4 cups milk", "3/4 cup sugar", "4 tbsp ghee", "1/4 cup chopped nuts", "1/2 tsp cardamom powder", "A few saffron strands"],
+                    steps: ["Heat ghee in heavy bottom pan", "Add grated carrots", "Sauté for 5 minutes", "Add milk and bring to boil", "Cook on medium heat stirring occasionally", "Continue until milk is absorbed", "Add sugar and mix", "Cook until mixture thickens", "Add cardamom powder", "Add saffron strands", "Garnish with nuts", "Serve hot or cold"]
+                }
+            ],
+            cabbage: [
+                {
+                    name: "Cabbage Stir Fry",
+                    ingredients: ["1 small cabbage shredded", "2 onions", "2 green chilies", "1 tsp mustard seeds", "1 tsp urad dal", "Curry leaves", "1/2 tsp turmeric", "Salt to taste", "2 tbsp oil", "Grated coconut"],
+                    steps: ["Heat oil in pan", "Add mustard seeds and urad dal", "Add curry leaves", "Add chopped onions and chilies", "Sauté until onions soften", "Add shredded cabbage", "Add turmeric and salt", "Mix well", "Cover and cook for 5 minutes", "Stir occasionally", "Add grated coconut", "Mix and serve hot"]
+                }
+            ],
+            beans: [
+                {
+                    name: "Green Beans Curry",
+                    ingredients: ["500g green beans chopped", "2 onions", "2 tomatoes", "1 tsp cumin seeds", "1 tsp coriander powder", "1/2 tsp turmeric", "1 tsp garam masala", "Salt to taste", "2 tbsp oil", "Fresh coriander"],
+                    steps: ["Heat oil in pan", "Add cumin seeds", "Add chopped onions", "Sauté until golden", "Add chopped tomatoes", "Add all spices", "Cook until tomatoes are soft", "Add chopped beans", "Add salt and mix", "Add little water", "Cover and cook for 15 minutes", "Garnish with coriander and serve"]
+                }
+            ],
+            peas: [
+                {
+                    name: "Matar Paneer",
+                    ingredients: ["200g paneer cubes", "2 cups green peas", "2 onions", "3 tomatoes", "2 tsp ginger-garlic paste", "1 tsp garam masala", "1 tsp red chili powder", "1/2 tsp turmeric", "Salt to taste", "2 tbsp oil", "Cream"],
+                    steps: ["Heat oil in pan", "Add chopped onions", "Sauté until golden", "Add ginger-garlic paste", "Add tomato puree", "Add all spices", "Cook until oil separates", "Add green peas", "Add water and cook peas", "Add paneer cubes", "Simmer for 5 minutes", "Add cream and serve"]
+                }
+            ],
+            eggplant: [
+                {
+                    name: "Baingan Bharta",
+                    ingredients: ["2 large eggplants", "2 onions", "2 tomatoes", "2 green chilies", "1 tsp cumin seeds", "1/2 tsp turmeric", "1 tsp red chili powder", "Salt to taste", "2 tbsp oil", "Fresh coriander"],
+                    steps: ["Roast eggplants over flame until charred", "Peel and mash the eggplant", "Heat oil in pan", "Add cumin seeds", "Add chopped onions", "Add chopped tomatoes and chilies", "Add all spices", "Cook until tomatoes soften", "Add mashed eggplant", "Mix well and cook for 5 minutes", "Garnish with coriander", "Serve hot with roti"]
+                }
+            ],
+            okra: [
+                {
+                    name: "Bhindi Masala",
+                    ingredients: ["500g okra cut", "2 onions", "2 tomatoes", "1 tsp cumin seeds", "1 tsp coriander powder", "1/2 tsp turmeric", "1 tsp amchur powder", "Salt to taste", "3 tbsp oil"],
+                    steps: ["Wash and dry okra completely", "Cut into small pieces", "Heat oil in pan", "Add cumin seeds", "Add okra and stir fry", "Cook until okra is crispy", "Add chopped onions", "Add tomatoes and spices", "Mix well", "Cook covered for 5 minutes", "Add amchur powder", "Serve hot"]
+                }
+            ],
+            mushroom: [
+                {
+                    name: "Mushroom Masala",
+                    ingredients: ["500g mushrooms sliced", "2 onions", "2 tomatoes", "1/2 cup cream", "1 tsp ginger-garlic paste", "1 tsp garam masala", "1 tsp red chili powder", "Salt to taste", "2 tbsp oil", "Kasuri methi"],
+                    steps: ["Heat oil in pan", "Add chopped onions", "Sauté until golden", "Add ginger-garlic paste", "Add tomato puree", "Add all spices", "Cook until oil separates", "Add sliced mushrooms", "Cook until mushrooms soften", "Add cream", "Add kasuri methi", "Simmer and serve"]
+                }
+            ],
+            rice: [
+                {
+                    name: "Vegetable Biryani",
+                    ingredients: ["2 cups basmati rice", "Mixed vegetables", "2 onions", "1 cup yogurt", "Whole spices", "Mint leaves", "Saffron", "Ghee", "Biryani masala", "Salt"],
+                    steps: ["Soak rice for 30 minutes", "Fry onions until golden", "Add vegetables and yogurt", "Add biryani masala and cook", "Boil rice until 70% done", "Layer rice over vegetables", "Add fried onions and saffron", "Cover and cook on dum", "Let it rest for 10 minutes", "Mix gently", "Garnish with mint", "Serve hot with raita"]
+                }
+            ],
+            lentils: [
+                {
+                    name: "Dal Tadka",
+                    ingredients: ["1 cup yellow lentils", "2 tomatoes", "2 green chilies", "1 tsp cumin seeds", "3 cloves garlic", "1/2 tsp turmeric", "1 tsp red chili powder", "Salt to taste", "2 tbsp ghee", "Coriander leaves"],
+                    steps: ["Pressure cook lentils with turmeric", "Mash lentils lightly", "Heat ghee in pan", "Add cumin seeds", "Add chopped garlic", "Add chopped tomatoes and chilies", "Add red chili powder", "Cook until tomatoes soften", "Pour tadka over cooked dal", "Mix well", "Garnish with coriander", "Serve hot with rice"]
+                }
+            ]
+        };
+
+        const seasonalRecipes = {
+            summer: ["Tomato Rice", "Palak Soup", "Onion Pakoda", "Cucumber Raita"],
+            monsoon: ["Onion Pakoda", "Gobi Manchurian", "Dal Tadka"],
+            winter: ["Palak Paneer", "Carrot Halwa", "Aloo Gobi", "Dum Aloo"],
+            spring: ["Green Beans Curry", "Matar Paneer", "Vegetable Biryani"]
+        };
+
+        const ingredients = ["paneer", "potato", "tomato", "onion", "spinach", "cauliflower", "carrot", "cabbage", "beans", "peas", "eggplant", "okra", "mushroom", "rice", "lentils"];
+        const seasons = ["summer", "monsoon", "winter", "spring"];
+
+        let currentMode = 'ingredient';
+        let currentSelection = '';
+        let currentRecipe = null;
+        let currentStep = 0;
+
+        function goToPage(pageNum) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page' + pageNum).classList.add('active');
+        }
+
+        function switchMode(mode) {
+            currentMode = mode;
+            const buttons = document.querySelectorAll('.toggle-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (mode === 'ingredient') {
+                document.getElementById('modeTitle').textContent = 'The Ingredient Chef';
+                document.getElementById('ingredientSection').style.display = 'block';
+                document.getElementById('seasonSection').style.display = 'none';
+            } else {
+                document.getElementById('modeTitle').textContent = 'The Seasonal Chef';
+                document.getElementById('ingredientSection').style.display = 'none';
+                document.getElementById('seasonSection').style.display = 'block';
+            }
+        }
+
+        function initializeSelections() {
+            const ingredientGrid = document.getElementById('ingredientGrid');
+            ingredientGrid.innerHTML = '';
+            ingredients.forEach(ing => {
+                const card = document.createElement('div');
+                card.className = 'ingredient-card';
+                card.innerHTML = `<strong>${ing.charAt(0).toUpperCase() + ing.slice(1)}</strong>`;
+                card.onclick = () => selectIngredient(ing);
+                ingredientGrid.appendChild(card);
+            });
+
+            const seasonGrid = document.getElementById('seasonGrid');
+            seasonGrid.innerHTML = '';
+            seasons.forEach(season => {
+                const card = document.createElement('div');
+                card.className = 'season-card';
+                card.innerHTML = `<strong>${season.charAt(0).toUpperCase() + season.slice(1)}</strong>`;
+                card.onclick = () => selectSeason(season);
+                seasonGrid.appendChild(card);
+            });
+        }
+
+        function selectIngredient(ingredient) {
+            currentSelection = ingredient;
+            showRecipes();
+        }
+
+        function selectSeason(season) {
+            currentSelection = season;
+            showRecipes();
+        }
+
+        function showRecipes() {
+            const recipeGrid = document.getElementById('recipeGrid');
+            recipeGrid.innerHTML = '';
+
+            let availableRecipes = [];
+
+            if (currentMode === 'ingredient') {
+                availableRecipes = recipes[currentSelection] || [];
+            } else {
+                const recipeNames = seasonalRecipes[currentSelection] || [];
+                recipeNames.forEach(name => {
+                    for (let key in recipes) {
+                        const found = recipes[key].find(r => r.name === name);
+                        if (found) availableRecipes.push(found);
+                    }
+                });
+            }
+
+            if (availableRecipes.length === 0) {
+                recipeGrid.innerHTML = '<div class="error-message"><h2>😔 Sorry!</h2><p>No recipes available for this selection. Please try another option!</p></div>';
+            } else {
+                availableRecipes.forEach(recipe => {
+                    const ticket = document.createElement('div');
+                    ticket.className = 'recipe-ticket';
+                    ticket.innerHTML = `<h3>${recipe.name}</h3>`;
+                    ticket.onclick = () => selectRecipe(recipe);
+                    recipeGrid.appendChild(ticket);
+                });
+            }
+
+            goToPage(3);
+        }
+
+        function selectRecipe(recipe) {
+            currentRecipe = recipe;
+            document.getElementById('recipeName').textContent = recipe.name;
+            
+            const list = document.getElementById('ingredientsList');
+            list.innerHTML = '';
+            recipe.ingredients.forEach(ing => {
+                const item = document.createElement('div');
+                item.className = 'ingredient-item';
+                item.innerHTML = `<input type="checkbox"> <span>${ing}</span>`;
+                list.appendChild(item);
+            });
+
+            goToPage(4);
+        }
+
+        function startCooking() {
+            currentStep = 0;
+            showStep();
+            goToPage(5);
+        }
+
+        function showStep() {
+            if (currentStep < currentRecipe.steps.length) {
+                document.getElementById('stepNumber').textContent = `Step ${currentStep + 1}`;
+                document.getElementById('stepText').textContent = currentRecipe.steps[currentStep];
+            } else {
+                goToPage(6);
+            }
+        }
+
+        function nextStep() {
+            currentStep++;
+            showStep();
+        }
+
+        initializeSelections();
+    </script>
+</body>
+</html>

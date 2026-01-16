@@ -5,7 +5,7 @@
 
 ### OPENING
 
-"Good morning/afternoon, respected faculty and fellow students. I am [Your Name], and along with my team members Aadi Runwal, Anurag Soni, Abhishek Kumar, and Ankit Khandait, I'm pleased to present our Minor Project: **Kitchen Compass - A Recipe Finder Web Application**."
+"Good morning/afternoon, respected faculty and fellow students. I am Anurag Soni, I'm pleased to present our Minor Project: **Kitchen Compass - A Recipe Finder Web Application**."
 
 ---
 
@@ -213,34 +213,6 @@ A web application that helps people find recipes based on:
 - All 6 "pages" are actually in ONE HTML file
 - JavaScript just shows/hides different sections
 - That's why it's so fast - no page reloads!
-
----
-
-## WHAT EACH TEAM MEMBER CAN SAY THEY DID
-
-**Aadi Runwal (Frontend & UI Design):**
-- Designed the visual interface
-- Created the color schemes and layouts
-- Implemented animations and transitions
-- Made it responsive for all devices
-
-**Anurag Soni (Backend Logic & Database):**
-- Organized the recipe database structure
-- Managed data organization (30+ recipes)
-- Implemented search and filter logic
-- Ensured data flows correctly through the app
-
-**Abhishek Kumar (Testing & Documentation):**
-- Conducted testing on multiple browsers/devices
-- Created user test cases
-- Wrote project documentation
-- Fixed bugs found during testing
-
-**Ankit Khandait (Integration & Features):**
-- Connected different components together
-- Implemented ingredient checklist feature
-- Ensured smooth navigation flow
-- Validated user interactions
 
 ---
 
